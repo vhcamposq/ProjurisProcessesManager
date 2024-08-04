@@ -7,7 +7,10 @@ import com.vhcamposq.projurisprocessesmanager.mapper.ProcessesMapper;
 import com.vhcamposq.projurisprocessesmanager.repository.ProcessesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ProcessesService {
 
@@ -26,5 +29,38 @@ public class ProcessesService {
         Processes savedProcesses = processesRepository.save(saveProcesses);
         return  MessageResponseDTO.builder().message("Process created with ID " + savedProcesses.getId()).build();
 
+    }
+    public ProcessesDTO findById(Long id) {
+        Processes processes = processesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Process not found"));
+        return processesMapper.toDTO(processes);
+    }
+
+    public List<ProcessesDTO> findAll() {
+        return processesRepository.findAll()
+                .stream()
+                .map(processesMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public MessageResponseDTO update(Long id, ProcessesDTO processesDTO) {
+        processesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Process not found"));
+
+        Processes processesToUpdate = processesMapper.toModel(processesDTO);
+        Processes updatedProcesses = processesRepository.save(processesToUpdate);
+        return createMessageResponse(updatedProcesses.getId(), "Process updated with ID ");
+    }
+
+    public void delete(Long id) {
+        processesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Process not found"));
+        processesRepository.deleteById(id);
+    }
+
+    private MessageResponseDTO createMessageResponse(Long id, String message) {
+        return MessageResponseDTO.builder()
+                .message(message + id)
+                .build();
     }
 }

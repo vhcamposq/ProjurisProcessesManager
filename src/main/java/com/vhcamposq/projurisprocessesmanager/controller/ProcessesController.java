@@ -2,30 +2,46 @@ package com.vhcamposq.projurisprocessesmanager.controller;
 
 import com.vhcamposq.projurisprocessesmanager.dto.MessageResponseDTO;
 import com.vhcamposq.projurisprocessesmanager.dto.ProcessesDTO;
-import com.vhcamposq.projurisprocessesmanager.entity.Processes;
-import com.vhcamposq.projurisprocessesmanager.repository.ProcessesRepository;
 import com.vhcamposq.projurisprocessesmanager.service.ProcessesService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/processes")
+@RequestMapping("/api/v1/processes")
 public class ProcessesController {
+    private final ProcessesService processesService;
 
-    private ProcessesService processesService;
-    @Autowired
     public ProcessesController(ProcessesService processesService) {
         this.processesService = processesService;
     }
 
     @PostMapping
-    public MessageResponseDTO create (@RequestBody @Valid ProcessesDTO processesDTO){
+    public MessageResponseDTO create(@RequestBody @Valid ProcessesDTO processesDTO){
         return processesService.create(processesDTO);
+    }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProcessesDTO> findById(@PathVariable Long id) {
+        ProcessesDTO processesDTO = processesService.findById(id);
+        return ResponseEntity.ok(processesDTO);
+    }
+
+    @GetMapping
+    public List<ProcessesDTO> findAll() {
+        return processesService.findAll();
+    }
+
+    @PutMapping("/{id}")
+    public MessageResponseDTO update(@PathVariable Long id, @RequestBody @Valid ProcessesDTO processesDTO) {
+        return processesService.update(id, processesDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        processesService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
