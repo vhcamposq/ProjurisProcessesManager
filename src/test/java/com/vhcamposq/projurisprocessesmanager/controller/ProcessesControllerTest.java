@@ -66,6 +66,23 @@ class ProcessesControllerTest {
                         .build())
                 .build();
     }
+
+    @Test
+    void testFindAll() throws Exception {
+        ProcessesDTO processesDTO = createProcessesDTO();
+
+        when(processesService.findAll()).thenReturn(Collections.singletonList(processesDTO));
+
+        mockMvc.perform(get("/api/v1/processes")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].name").value(processesDTO.getName()))
+                .andExpect(jsonPath("$[0].caseNumber").value(processesDTO.getCaseNumber()))
+                .andExpect(jsonPath("$[0].status").value(processesDTO.getStatus()))
+                .andExpect(jsonPath("$[0].lawyer.name").value(processesDTO.getLawyer().getName()))
+                .andExpect(jsonPath("$[0].lawyer.oabNumber").value(processesDTO.getLawyer().getOabNumber()));
+    }
     private MessageResponseDTO createMessageResponseDTO(String message) {
         return MessageResponseDTO.builder()
                 .message(message)
