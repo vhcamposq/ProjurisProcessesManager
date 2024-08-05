@@ -23,16 +23,18 @@ public class ProcessesService {
         this.processesRepository = processesRepository;
     }
 
-    public MessageResponseDTO create (ProcessesDTO processesDTO){
+    public MessageResponseDTO create(ProcessesDTO processesDTO) {
         Processes saveProcesses = processesMapper.toModel(processesDTO);
 
         Processes savedProcesses = processesRepository.save(saveProcesses);
-        return  MessageResponseDTO.builder().message("Process created with ID " + savedProcesses.getId()).build();
-
+        return MessageResponseDTO.builder()
+                .message("Processes created with ID " + savedProcesses.getId())
+                .build();
     }
+
     public ProcessesDTO findById(Long id) {
         Processes processes = processesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Process not found"));
+                .orElseThrow(() -> new RuntimeException("Processes not found"));
         return processesMapper.toDTO(processes);
     }
 
@@ -45,16 +47,16 @@ public class ProcessesService {
 
     public MessageResponseDTO update(Long id, ProcessesDTO processesDTO) {
         processesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Process not found"));
+                .orElseThrow(() -> new RuntimeException("Processes not found"));
 
         Processes processesToUpdate = processesMapper.toModel(processesDTO);
         Processes updatedProcesses = processesRepository.save(processesToUpdate);
-        return createMessageResponse(updatedProcesses.getId(), "Process updated with ID ");
+        return createMessageResponse(updatedProcesses.getId(), "Processes updated with ID ");
     }
 
     public void delete(Long id) {
         processesRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Process not found"));
+                .orElseThrow(() -> new RuntimeException("Processes not found"));
         processesRepository.deleteById(id);
     }
 
