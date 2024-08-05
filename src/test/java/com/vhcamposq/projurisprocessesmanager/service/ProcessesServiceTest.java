@@ -36,6 +36,7 @@ class ProcessesServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    // Testa a criação de um novo processo
     @Test
     void testCreate() {
         ProcessesDTO processesDTO = createProcessesDTO();
@@ -49,6 +50,7 @@ class ProcessesServiceTest {
         assertEquals("Processes created with ID 1", responseDTO.getMessage());
     }
 
+    // Cria um objeto ProcessesDTO para ser utilizado nos testes
     private ProcessesDTO createProcessesDTO() {
         return ProcessesDTO.builder()
                 .id(1L)
@@ -63,6 +65,7 @@ class ProcessesServiceTest {
                 .build();
     }
 
+    // Cria um objeto Processes para ser utilizado nos testes
     private Processes createProcesses() {
         return Processes.builder()
                 .id(1L)
@@ -78,6 +81,7 @@ class ProcessesServiceTest {
                 .build();
     }
 
+    // Testa a busca de um processo pelo ID
     @Test
     void testFindById() {
         Processes processes = createProcesses();
@@ -90,6 +94,7 @@ class ProcessesServiceTest {
         assertEquals("Processo tal", processesDTO.getName());
     }
 
+    // Testa a busca de um processo pelo ID quando o processo não é encontrado
     @Test
     void testFindById_NotFound() {
         when(processesRepository.findById(anyLong())).thenReturn(Optional.empty());
@@ -97,6 +102,7 @@ class ProcessesServiceTest {
         assertThrows(RuntimeException.class, () -> processesService.findById(1L));
     }
 
+    // Testa a atualização de um processo existente
     @Test
     void testUpdate() {
         ProcessesDTO processesDTO = createProcessesDTO();
@@ -111,6 +117,7 @@ class ProcessesServiceTest {
         assertEquals("Processes updated with ID 1", responseDTO.getMessage());
     }
 
+    // Testa a atualização de um processo inexistente
     @Test
     void testUpdate_NotFound() {
         ProcessesDTO processesDTO = createProcessesDTO();
@@ -120,6 +127,7 @@ class ProcessesServiceTest {
         assertThrows(RuntimeException.class, () -> processesService.update(1L, processesDTO));
     }
 
+    // Testa a deleção de um processo existente
     @Test
     void testDelete() {
         Processes processes = createProcesses();
@@ -132,6 +140,7 @@ class ProcessesServiceTest {
         verify(processesRepository, times(1)).deleteById(anyLong());
     }
 
+    // Testa a deleção de um processo inexistente
     @Test
     void testDelete_NotFound() {
         when(processesRepository.findById(anyLong())).thenReturn(Optional.empty());

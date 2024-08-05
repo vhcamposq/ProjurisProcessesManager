@@ -41,9 +41,9 @@ class ProcessesControllerTest {
     void testCreate() throws Exception {
         ProcessesDTO processesDTO = createProcessesDTO();
         MessageResponseDTO responseDTO = createMessageResponseDTO("Processes created with ID 1");
-
+        // Configurando o mock para o service
         when(processesService.create(any(ProcessesDTO.class))).thenReturn(responseDTO);
-
+        // Realizando uma requisição POST e verificando a resposta
         mockMvc.perform(post("/api/v1/processes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(processesDTO)))
@@ -70,9 +70,9 @@ class ProcessesControllerTest {
     @Test
     void testFindById() throws Exception {
         ProcessesDTO processesDTO = createProcessesDTO();
-
+        // Configurando o mock para o service
         when(processesService.findById(1L)).thenReturn(processesDTO);
-
+        // Realizando uma requisição GET e verificando a resposta
         mockMvc.perform(get("/api/v1/processes/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -87,9 +87,9 @@ class ProcessesControllerTest {
     @Test
     void testFindAll() throws Exception {
         ProcessesDTO processesDTO = createProcessesDTO();
-
+        // Configurando o mock para o service
         when(processesService.findAll()).thenReturn(Collections.singletonList(processesDTO));
-
+        // Realizando uma requisição GET e verificando a resposta
         mockMvc.perform(get("/api/v1/processes")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -105,9 +105,9 @@ class ProcessesControllerTest {
     void testUpdate() throws Exception {
         ProcessesDTO processesDTO = createProcessesDTO();
         MessageResponseDTO responseDTO = createMessageResponseDTO("Processes updated with ID 1");
-
+        // Configurando o mock para o service
         when(processesService.update(any(Long.class), any(ProcessesDTO.class))).thenReturn(responseDTO);
-
+        // Realizando uma requisição PUT e verificando a resposta
         mockMvc.perform(put("/api/v1/processes/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(processesDTO)))
@@ -117,6 +117,7 @@ class ProcessesControllerTest {
     }
     @Test
     void testDelete() throws Exception {
+        // Realizando uma requisição DELETE e verificando a resposta
         mockMvc.perform(delete("/api/v1/processes/1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
