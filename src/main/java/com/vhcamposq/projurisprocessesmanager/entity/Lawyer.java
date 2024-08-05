@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Entidade representando um advogado.
+ */
 @Entity
 @Data
 @Builder
