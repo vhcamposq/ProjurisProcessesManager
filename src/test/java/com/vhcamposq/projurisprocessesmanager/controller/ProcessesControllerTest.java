@@ -115,10 +115,17 @@ class ProcessesControllerTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").value("Processes updated with ID 1"));
     }
+    @Test
+    void testDelete() throws Exception {
+        mockMvc.perform(delete("/api/v1/processes/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
 
     private MessageResponseDTO createMessageResponseDTO(String message) {
         return MessageResponseDTO.builder()
                 .message(message)
                 .build();
     }
+
 }
