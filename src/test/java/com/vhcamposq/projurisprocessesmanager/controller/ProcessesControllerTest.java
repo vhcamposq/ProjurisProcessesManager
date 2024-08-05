@@ -100,6 +100,22 @@ class ProcessesControllerTest {
                 .andExpect(jsonPath("$[0].lawyer.name").value(processesDTO.getLawyer().getName()))
                 .andExpect(jsonPath("$[0].lawyer.oabNumber").value(processesDTO.getLawyer().getOabNumber()));
     }
+
+    @Test
+    void testUpdate() throws Exception {
+        ProcessesDTO processesDTO = createProcessesDTO();
+        MessageResponseDTO responseDTO = createMessageResponseDTO("Processes updated with ID 1");
+
+        when(processesService.update(any(Long.class), any(ProcessesDTO.class))).thenReturn(responseDTO);
+
+        mockMvc.perform(put("/api/v1/processes/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(processesDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Processes updated with ID 1"));
+    }
+
     private MessageResponseDTO createMessageResponseDTO(String message) {
         return MessageResponseDTO.builder()
                 .message(message)
