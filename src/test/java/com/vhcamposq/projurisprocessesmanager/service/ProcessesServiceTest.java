@@ -97,4 +97,27 @@ class ProcessesServiceTest {
         assertThrows(RuntimeException.class, () -> processesService.findById(1L));
     }
 
+    @Test
+    void testUpdate() {
+        ProcessesDTO processesDTO = createProcessesDTO();
+        Processes processes = createProcesses();
+
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.of(processes));
+        when(processesMapper.toModel(any(ProcessesDTO.class))).thenReturn(processes);
+        when(processesRepository.save(any(Processes.class))).thenReturn(processes);
+
+        MessageResponseDTO responseDTO = processesService.update(1L, processesDTO);
+
+        assertEquals("Processes updated with ID 1", responseDTO.getMessage());
+    }
+
+    @Test
+    void testUpdate_NotFound() {
+        ProcessesDTO processesDTO = createProcessesDTO();
+
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> processesService.update(1L, processesDTO));
+    }
+
 }
