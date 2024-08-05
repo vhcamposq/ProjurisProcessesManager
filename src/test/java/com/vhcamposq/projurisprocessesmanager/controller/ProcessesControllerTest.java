@@ -68,6 +68,23 @@ class ProcessesControllerTest {
     }
 
     @Test
+    void testFindById() throws Exception {
+        ProcessesDTO processesDTO = createProcessesDTO();
+
+        when(processesService.findById(1L)).thenReturn(processesDTO);
+
+        mockMvc.perform(get("/api/v1/processes/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(processesDTO.getName()))
+                .andExpect(jsonPath("$.caseNumber").value(processesDTO.getCaseNumber()))
+                .andExpect(jsonPath("$.status").value(processesDTO.getStatus()))
+                .andExpect(jsonPath("$.lawyer.name").value(processesDTO.getLawyer().getName()))
+                .andExpect(jsonPath("$.lawyer.oabNumber").value(processesDTO.getLawyer().getOabNumber()));
+    }
+
+    @Test
     void testFindAll() throws Exception {
         ProcessesDTO processesDTO = createProcessesDTO();
 
