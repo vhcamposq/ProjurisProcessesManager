@@ -12,7 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -73,4 +77,24 @@ class ProcessesServiceTest {
                         .build())
                 .build();
     }
+
+    @Test
+    void testFindById() {
+        Processes processes = createProcesses();
+
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.of(processes));
+        when(processesMapper.toDTO(any(Processes.class))).thenReturn(createProcessesDTO());
+
+        ProcessesDTO processesDTO = processesService.findById(1L);
+
+        assertEquals("Processo tal", processesDTO.getName());
+    }
+
+    @Test
+    void testFindById_NotFound() {
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> processesService.findById(1L));
+    }
+
 }
