@@ -60,6 +60,13 @@ Para iniciar a aplicação, execute o comando:
 ```bash
 mvn spring-boot:run
 ```
+
+Testes
+Para executar os testes, utilize o comando:
+
+```bash
+mvn test
+```
 A aplicação estará disponível em http://localhost:8080.
 
 ### Dependências
