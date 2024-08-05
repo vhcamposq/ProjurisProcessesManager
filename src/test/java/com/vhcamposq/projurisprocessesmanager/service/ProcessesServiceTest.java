@@ -120,4 +120,23 @@ class ProcessesServiceTest {
         assertThrows(RuntimeException.class, () -> processesService.update(1L, processesDTO));
     }
 
+    @Test
+    void testDelete() {
+        Processes processes = createProcesses();
+
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.of(processes));
+        doNothing().when(processesRepository).deleteById(anyLong());
+
+        processesService.delete(1L);
+
+        verify(processesRepository, times(1)).deleteById(anyLong());
+    }
+
+    @Test
+    void testDelete_NotFound() {
+        when(processesRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> processesService.delete(1L));
+    }
+
 }
