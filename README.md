@@ -84,7 +84,7 @@ As dependências utilizadas no projeto são:
 - **mockito**: Framework de testes utilizado para criar mocks e realizar testes unitários.
 - **mapstruct**: Mapeador de código utilizado para converter entre objetos de diferentes tipos.
 - **javax.validation**: Biblioteca para validar objetos de modelo utilizando anotações.
-- 
+
 
 As dependências em formato XML para inclusão no `pom.xml` são:
 
